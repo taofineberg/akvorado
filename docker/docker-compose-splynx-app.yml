@@ -1,0 +1,10 @@
+services:
+  splynx-app:
+    build:
+      context: ./splynx-app/
+      dockerfile: Dockerfile
+    container_name: splynx-app
+    volumes:
+      - /opt/akvorado/config:/opt/akvorado/config
+      - /opt/akvorado/.creds:/opt/akvorado/.creds
+    restart: unless-stopped
