@@ -9,8 +9,14 @@ mock_*.go
 *_enumer.go
 
 /console/data/frontend/
-
 *~
 /.go-cache
 /.npm-cache
 /result
+.creds
+config/customers.csv
+config/gps.csv
+config/schema.yaml
+config/networks.yaml
+config/interface-classifiers.yaml
+config/exporter-classifiers.yaml
