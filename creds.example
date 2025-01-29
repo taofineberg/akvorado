@@ -1,0 +1,14 @@
+## Copy this file to .creds and fill in the values
+
+#Splynx
+SPLYNX_URL=https://splynx.example.com/api/2.0/
+SPLYNX_API_KEY=
+SPLYNX_API_SECRET=
+
+#Sonar
+GRAPHQL_URL='https://XXXXXXXX.sonar.software/api/graphql'
+AUTH_TOKEN='Token'
+
+#SMX
+SMX_BASE_URL=https://xxxxxxxx:18443/rest/v1
+SMX_TOKEN=xxxxxxx
