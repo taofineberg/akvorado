@@ -1,0 +1,81 @@
+custom-dictionaries:
+  customers:
+    layout: complex_key_hashed
+    keys:
+      - name: addr
+        type: String
+    attributes:
+      - name: name
+        type: String
+        label: CustomerName
+      - name: id
+        type: String
+        label: SonarID
+      - name: service
+        type: String
+        label: SonarService
+      - name: accounttype
+        type: String
+        label: SonarAccountType
+      - name: accountstatus
+        type: String
+        label: SonarAccountStatus
+      - name: city
+        type: String
+        label: SonarCity
+      - name: zip
+        type: String
+        label: SonarZIP
+      - name: latitude
+        type: String
+        label: SonarLatitude
+      - name: longitude
+        type: String
+        label: SonarLongitude
+      - name: description
+        type: String
+        label: SonarDescription
+    source: /etc/akvorado/customers.csv
+    dimensions:
+      - SrcAddr
+      - DstAddr
+#  customersipv6:
+#    layout: complex_key_hashed
+#    keys:
+#      - name: addr
+#        type: String
+#    attributes:
+#      - name: name
+#        type: String
+#        label: CustomerName
+#      - name: id
+#        type: String
+#        label: SonarID
+#      - name: service
+#        type: String
+#        label: SonarService
+#      - name: accounttype
+#        type: String
+#        label: SonarAccountType
+#      - name: accountstatus
+#        type: String
+#        label: SonarAccountStatus
+#      - name: city
+#        type: String
+#        label: SonarCity
+#      - name: zip
+#        type: String
+#        label: SonarZIP
+#      - name: latitude
+#        type: String
+#        label: SonarLatitude
+#      - name: longitude
+#        type: String
+#        label: SonarLongitude
+#      - name: description
+#        type: String
+#        label: SonarDescription
+#    source: /etc/akvorado/customers_subnet.csv
+#    dimensions:
+#      - SrcNetPrefix
+#      - DstNetPrefix
