@@ -1,0 +1,10 @@
+services:
+  sonar-get-app:
+    build:
+      context: ./sonar-get-app/
+      dockerfile: Dockerfile
+    container_name: sonar-get-app
+    volumes:
+      - /opt/akvorado/config:/opt/akvorado/config
+      - /opt/akvorado/.creds:/opt/akvorado/.creds
+    restart: unless-stopped

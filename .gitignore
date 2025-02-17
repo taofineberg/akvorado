@@ -20,3 +20,5 @@ config/schema.yaml
 config/networks.yaml
 config/interface-classifiers.yaml
 config/exporter-classifiers.yaml
+config/customers_subnet.csv
+config/ip_assignments.csv

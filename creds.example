@@ -12,3 +12,10 @@ AUTH_TOKEN='Token'
 #SMX
 SMX_BASE_URL=https://xxxxxxxx:18443/rest/v1
 SMX_TOKEN=xxxxxxx
+
+## Only requried if you chnage the mapping in the docker compose , this location is in the docker container 
+# OUTPUT_FILE_CUSTOMERS=/etc/akvorado/customers.csv
+# OUTPUT_FILE_IP_ASSIGNMENTS=/etc/akvorado/ip_assignments.csv
+# OUTPUT_FILE_CUSTOMERS_SUBNET=/etc/akvorado/customers_subnet.csv
+# OUTPUT_FILE_NETWORKS_YAML=/etc/akvorado/networks.yaml
+# OUTPUT_FILE_SCHEMA_YAML=/etc/akvorado/schema.yaml

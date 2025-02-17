@@ -14,6 +14,8 @@ services:
     volumes:
       - ./clickhouse-cluster.xml:/etc/clickhouse-server/config.d/cluster.xml
       - ./clickhouse-cluster-1.xml:/etc/clickhouse-server/config.d/cluster-1.xml
+    ports:
+      - "9000:9000"
   clickhouse-2:
     extends:
       file: docker-compose.yml

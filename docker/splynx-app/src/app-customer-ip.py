@@ -16,6 +16,12 @@ BASE_URL = os.getenv("SPLYNX_URL")
 API_KEY = os.getenv("SPLYNX_API_KEY")
 API_SECRET = os.getenv("SPLYNX_API_SECRET")
 OUTPUT_FILE = os.getenv("OUTPUT_FILE", "/opt/akvorado/config/customers.csv")
+OUTPUT_FILE_CUSTOMERS = os.getenv("OUTPUT_FILE_CUSTOMERS", "/opt/akvorado/config/customers.csv")
+OUTPUT_FILE_IP_ASSIGNMENTS = os.getenv("OUTPUT_FILE_IP_ASSIGNMENTS", "/opt/akvorado/config/ip_assignments.csv")
+OUTPUT_FILE_CUSTOMERS_SUBNET = os.getenv("OUTPUT_FILE_CUSTOMERS_SUBNET", "/opt/akvorado/config/customers_subnet.csv")
+OUTPUT_FILE_NETWORKS_YAML = os.getenv("OUTPUT_FILE_NETWORKS_YAML", "/opt/akvorado/config/networks.yaml")
+OUTPUT_FILE_SCHEMA_YAML = os.getenv("OUTPUT_FILE_SCHEMA_YAML", "/opt/akvorado/config/schema.yaml")
+
 LOG_LEVEL = os.getenv("SPLYNX_LOG_LEVEL", "INFO").upper()
 
 # Ensure required environment variables are set
@@ -152,16 +158,16 @@ def process_customer_data(customer_data, internet_services):
     
     return data
 
-def write_customer_data_to_csv(data, output_file):
+def write_customer_data_to_csv(data, output_file_customers):
     """Write processed customer data to CSV."""
     try:
-        logging.info("Saving customer data to %s", output_file)
-        with open(output_file, mode='w', newline='') as file:
+        logging.info("Saving customer data to %s", output_file_customers)
+        with open(output_file_customers, mode='w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(["addr", "customerName", "latitude", "longitude"])
             writer.writerows(data)
     except OSError as e:
-        logging.error("Failed to write to %s: %s", output_file, e)
+        logging.error("Failed to write to %s: %s", output_file_customers, e)
         raise
 
 def main():
@@ -174,7 +180,7 @@ def main():
             cid: fetch_internet_services(cid, headers) for cid in customer_ids
         }
         processed_data = process_customer_data(customer_data, internet_services)
-        write_customer_data_to_csv(processed_data, OUTPUT_FILE)
+        write_customer_data_to_csv(processed_data, OUTPUT_FILE_CUSTOMERS)
         logging.info("Script completed successfully")
         
         # Wait for 24 hours before running again
