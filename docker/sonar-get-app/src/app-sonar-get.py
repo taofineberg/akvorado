@@ -51,6 +51,12 @@ def is_ipv4(address):
     except ValueError:
         return False
 
+def format_subnet(subnet):
+    # Example implementation of format_subnet function
+    # This function should take a subnet and return it in the desired format
+    # Replace the following line with the actual implementation
+    return subnet
+
 def fetch_sonar_data():
     """
     Fetches IP assignments from Sonar's GraphQL API and returns a list of subnets
@@ -72,47 +78,58 @@ def fetch_sonar_data():
     """
     query = """
     {
-      accounts(paginator: {page: 1, records_per_page: 10000}) {
+    accounts(paginator: {page: 1, records_per_page: 10000}) {
         entities {
-          name
-          id
-          account_services {
+        name
+        id
+        account_services {
             entities {
-              service {
+            service {
                 name
-              }
             }
-          }
-          account_type { 
-            name 
-          }
-          account_status {
+            }
+        }
+        account_type {
             name
-          }
-          addresses {
+        }
+        account_status {
+            name
+        }
+        addresses {
             entities {
-              city
-              zip
-              latitude
-              longitude
-              inventory_items {
+            city
+            zip
+            latitude
+            longitude
+            inventory_items {
                 entities {
-                  ip_assignments {
+                inventory_model_field_data {
                     entities {
-                      subnet
-                      description
-                      ip_pool {
+                    ip_assignments {
+                        entities {
+                        subnet
+                        }
+                    }
+                    }
+                }
+                ip_assignments {
+                    entities {
+                    subnet
+                    soft
+                    subnet_id
+                    description
+                    ip_pool {
                         id
                         name
-                      }
                     }
-                  }
+                    }
                 }
-              }
+                }
             }
-          }
+            }
         }
-      }
+        }
+    }
     }
     """
     try:
@@ -134,55 +151,70 @@ def fetch_sonar_data():
 
             # Extract services
             account_services = account.get("account_services", {}).get("entities", [])
-            services = [service_entity.get("service", {}).get("name") for service_entity in account_services if service_entity.get("service")]
-            services = "; ".join(filter(None, services)) if services else "N/A"
+            services = "; ".join([s.get("service", {}).get("name") for s in account_services if s.get("service")]) or None
 
-            # Extract account type
-            account_type = account.get("account_type", {}).get("name", "N/A")
-
-            # Extract account status
-            account_status = account.get("account_status", {}).get("name", "N/A")
+            account_type = account.get("account_type", {}).get("name")
+            account_status = account.get("account_status", {}).get("name")
 
             addresses = account.get("addresses", {}).get("entities", [])
             for address in addresses:
-                city = address.get("city", "N/A")
-                zip_code = address.get("zip", "N/A")
-                latitude = address.get("latitude", "N/A")
-                longitude = address.get("longitude", "N/A")
+                city = address.get("city")
+                zip_code = address.get("zip")
+                latitude = address.get("latitude")
+                longitude = address.get("longitude")
 
                 inventory_items = address.get("inventory_items", {}).get("entities", [])
                 for item in inventory_items:
+                    
+                    # Check direct ip_assignments in inventory_items
                     ip_assignments = item.get("ip_assignments", {}).get("entities", [])
                     for ip_assignment in ip_assignments:
                         subnet = ip_assignment.get("subnet")
-                        description = ip_assignment.get("description", "N/A")
+                        description = ip_assignment.get("description", None)
 
-                        if not subnet:
-                            logging.warning(f"Missing subnet in account ID: {account_id}")
-                            continue
+                        if subnet:
+                            subnet_prefixed = format_subnet(subnet)
+                            if subnet_prefixed:
+                                extracted_list.append({
+                                    "addr": subnet_prefixed,
+                                    "name": account_name,
+                                    "id": account_id,
+                                    "service": services,
+                                    "accounttype": account_type,
+                                    "accountstatus": account_status,
+                                    "city": city,
+                                    "zip": zip_code,
+                                    "latitude": latitude,
+                                    "longitude": longitude,
+                                    "description": description
+                                })
 
-                        # Determine if subnet is IPv4 and add prefix if necessary
-                        if is_ipv4(subnet):
-                            subnet_prefixed = f"::ffff:{subnet}"
-                        else:
-                            subnet_prefixed = subnet
+                    # Check nested ip_assignments inside inventory_model_field_data
+                    model_field_data = item.get("inventory_model_field_data", {}).get("entities", [])
+                    for field_data in model_field_data:
+                        ip_assignments = field_data.get("ip_assignments", {}).get("entities", [])
+                        for ip_assignment in ip_assignments:
+                            subnet = ip_assignment.get("subnet")
+                            description = ip_assignment.get("description", None)
 
-                        if subnet_prefixed and account_name and account_id:
-                            extracted_list.append({
-                                "addr": subnet_prefixed,
-                                "name": account_name,
-                                "id": account_id,
-                                "service": services,
-                                "accounttype": account_type,
-                                "accountstatus": account_status,
-                                "city": city,
-                                "zip": zip_code,
-                                "latitude": latitude,
-                                "longitude": longitude,
-                                "description": description
-                            })
-                        else:
-                            logging.warning(f"Missing data for subnet: {subnet} in account ID: {account_id}")
+                            if subnet:
+                                subnet_prefixed = format_subnet(subnet)
+                                if subnet_prefixed:
+                                    extracted_list.append({
+                                        "addr": subnet_prefixed,
+                                        "name": account_name,
+                                        "id": account_id,
+                                        "service": services,
+                                        "accounttype": account_type,
+                                        "accountstatus": account_status,
+                                        "city": city,
+                                        "zip": zip_code,
+                                        "latitude": latitude,
+                                        "longitude": longitude,
+                                        "description": description
+                                    })
+                                else:
+                                    logging.warning(f"Missing data for subnet: {subnet} in account ID: {account_id}")
 
         return extracted_list
 
