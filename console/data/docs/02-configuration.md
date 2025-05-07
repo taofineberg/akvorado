@@ -257,8 +257,9 @@ The following configuration keys are accepted:
   would also accept a single value).
 - `asn-providers` defines the source list for AS numbers. The available sources
   are `flow`, `flow-except-private` (use information from flow except if the ASN
-  is private), `routing`, and `routing-except-private`. The default value is
-  `flow` and `routing`.
+  is private), `routing`, `routing-except-private`, and `geoip`. The default
+  value is `flow`, `routing`, `geoip`. `geoip` should only be used at the end as
+  there is no fallback possible.
 - `net-providers` defines the sources for prefix lengths and nexthop. `flow` uses the value
   provided by the flow message (if any), while `routing` looks it up using the BMP
   component. If multiple sources are provided, the value of the first source
@@ -389,7 +390,7 @@ The `snmp` provider accepts the following configuration keys:
   `user-name`, `authentication-protocol` (`none`, `MD5`, `SHA`, `SHA224`,
   `SHA256`, `SHA384`, and `SHA512` are accepted), `authentication-passphrase`
   (if the previous value was set), `privacy-protocol` (`none`, `DES`, `AES`,
-  `AES192`, `AES256`, `AES192C`, and `AES256C` are accepted, the later being
+  `AES192`, `AES256`, `AES192-C`, and `AES256-C` are accepted, the later being
   Cisco-variant), `privacy-passphrase` (if the previous value was set), and
   `context-name`.
 - `ports` is a map from exporter subnets to the SNMP port to use to poll
@@ -492,6 +493,9 @@ an exporter configuration. An exporter configuration is map:
 - `name` is the name of the exporter
 - `default` is the default interface when no match is found
 - `ifindexes` is a map from interface indexes to interface
+- `skip-missing-interfaces` defines whether the exporter should process only
+  interfaces defined in the configuration and leave the remainder to the next
+  provider. This conflicts with the `default` setting.
 
 An interface is a `name`, a `description` and a `speed`.
 
@@ -505,10 +509,7 @@ metadata:
       exporters:
         2001:db8:1::1:
           name: exporter1
-          default:
-            name: unknown
-            description: Unknown interface
-            speed: 100
+          skip-missing-interfaces: true
           ifindexes:
             10:
               name: Gi0/0/10
@@ -725,6 +726,7 @@ flows. It accepts the following keys:
 - `brokers` specifies the list of brokers to use to bootstrap the
   connection to the Kafka cluster
 - `tls` defines the TLS configuration to connect to the cluster
+- `sasl` defines the SASL configuration to connect to the cluster
 - `version` tells which minimal version of Kafka to expect
 - `topic` defines the base topic name
 - `topic-configuration` describes how the topic should be configured
@@ -740,11 +742,17 @@ The following keys are accepted for the TLS configuration:
   in PEM format to authenticate to the broker. If the first one is empty, no
   client certificate is used. If the second one is empty, the key is expected to
   be in the certificate file.
-- `sasl-username` and `sasl-password` enables SASL authentication with the
+
+The following keys are accepted for SASL configuration:
+
+- `username` and `password` enables SASL authentication with the
   provided user and password.
-- `sasl-algorithm` tells which SASL mechanism to use for authentication. This
-  can be `none`, `plain`, `scram-sha256`, or `scram-sha512`. This should not be
+- `algorithm` tells which SASL mechanism to use for authentication. This
+  can be `none`, `plain`, `scram-sha256`, `scram-sha512`, or `oauth`. This should not be
   set to none when SASL is used.
+- `oauth-token-url` defines the URL to query to get a valid OAuth token (in this
+  case, `username` and `password` are used as client credentials).
+- `oauth-scopes` defines the list of scopes to request for the OAuth token.
 
 The following keys are accepted for the topic configuration:
 

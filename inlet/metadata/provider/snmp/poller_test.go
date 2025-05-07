@@ -241,7 +241,7 @@ func TestPoller(t *testing.T) {
 								OID:  "1.3.6.1.2.1.31.1.1.1.18.645",
 								Type: gosnmp.OctetString,
 								OnGet: func() (interface{}, error) {
-									return "GigabitEthernet-something", nil
+									return "Gi0/0/0/5", nil
 								},
 							},
 						},
@@ -279,10 +279,10 @@ func TestPoller(t *testing.T) {
 				t.Fatalf("New() error:\n%+v", err)
 			}
 
-			p.Query(context.Background(), provider.BatchQuery{ExporterIP: tc.ExporterIP, IfIndexes: []uint{641}})
-			p.Query(context.Background(), provider.BatchQuery{ExporterIP: tc.ExporterIP, IfIndexes: []uint{642}})
-			p.Query(context.Background(), provider.BatchQuery{ExporterIP: tc.ExporterIP, IfIndexes: []uint{643, 644, 645}})
-			p.Query(context.Background(), provider.BatchQuery{ExporterIP: tc.ExporterIP, IfIndexes: []uint{0}})
+			p.Query(context.Background(), &provider.BatchQuery{ExporterIP: tc.ExporterIP, IfIndexes: []uint{641}})
+			p.Query(context.Background(), &provider.BatchQuery{ExporterIP: tc.ExporterIP, IfIndexes: []uint{642}})
+			p.Query(context.Background(), &provider.BatchQuery{ExporterIP: tc.ExporterIP, IfIndexes: []uint{643, 644, 645}})
+			p.Query(context.Background(), &provider.BatchQuery{ExporterIP: tc.ExporterIP, IfIndexes: []uint{0}})
 			exporterStr := tc.ExporterIP.Unmap().String()
 			time.Sleep(50 * time.Millisecond)
 			if diff := helpers.Diff(got, []string{

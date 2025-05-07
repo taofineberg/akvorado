@@ -13,8 +13,24 @@ identified with a specific icon:
 
 ## Unreleased
 
-- 🌱 *build*: minimal Go version to build is now 1.23
+- 🩹 *inlet*: don't override flow-provided VLANs with VLAN from Ethernet header
+- 🌱 *orchestrator*: put SASL parameters in their own section in Kafka configuration
+- 🌱 *orchestrator*: add OAuth support to Kafka client
+
+## 1.11.4 - 2025-04-26
+
+- 💥 *inlet*: in SNMP metadata provider, prefer ifAlias over ifDescr for interface description
+- 🌱 *inlet*: add back `geoip` as an option for `inlet`→`core`→`asn-providers`
+- 🌱 *inlet*: allow the static provider to fallback to the next provider if some
+  interfaces are missing, when setting the `skip-missing-interfaces` option to
+  true.
+- 🌱 *build*: minimal Go version to build is now 1.24
+- 🌱 *build*: use PGO for better performance of the inlet
 - 🌱 *orchestrator*: ability to override ClickHouse or Kafka configuration in some components
+- 🌱 *docker*: make most containers wait for their dependencies to be healthy
+- 🌱 *docker*: switch from `bitnami/valkey` to `valkey/valkey`
+- 🌱 *docker*: update Kafka to 3.8 (not mandatory)
+- 🔒 *docker*: update Traefik to 3.3 (security issue)
 
 ## 1.11.3 - 2025-02-04
 
