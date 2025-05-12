@@ -3,11 +3,11 @@
     "asn2org": {
       "flake": false,
       "locked": {
-        "lastModified": 1744701975,
-        "narHash": "sha256-T9+3n7g2U1otkYaKQzc4gN9Zsbch8SIp0KxbKn1WYjI=",
+        "lastModified": 1746084271,
+        "narHash": "sha256-k/KmlRAvqdNBmfMPU/zitrpHvqJ14nUS8eS1mKAo7Go=",
         "owner": "vincentbernat",
         "repo": "asn2org",
-        "rev": "e0c01501e48bf17635de3d6b3e0a5237ca268b03",
+        "rev": "cadac3f8401ff8bea31890be7f3b3be8493e269a",
         "type": "github"
       },
       "original": {
@@ -37,11 +37,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1744868846,
-        "narHash": "sha256-5RJTdUHDmj12Qsv7XOhuospjAjATNiTMElplWnJE9Hs=",
+        "lastModified": 1746300365,
+        "narHash": "sha256-thYTdWqCRipwPRxWiTiH1vusLuAy0okjOyzRx4hLWh4=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c",
+        "rev": "f21e4546e3ede7ae34d12a84602a22246b31f7e0",
         "type": "github"
       },
       "original": {
